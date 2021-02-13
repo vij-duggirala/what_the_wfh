@@ -24,6 +24,7 @@ let timerWindow;
 
 let prev_message = "What The WFH1";
 let curr_message;
+var today, dd, mm, yyyy, i;
 
 app.on('ready', function () {
 
@@ -59,7 +60,7 @@ function startTimer() {
     let width = display.bounds.width;
     timerWindow = new BrowserWindow({
         width: 200,
-        height: 100,
+        height: 50,
         title: 'Timer',
         webPreferences: {
             contextIsolation: false,
@@ -91,6 +92,26 @@ function startTimer() {
 
 }
 
+var alltrack;
+
+ipcMain.on('date', async function (e, date) {
+    dd = date.substr(date.length - 2, 2);
+    mm = date.substr(date.length - 5, 2);
+    yyyy = date.substr(0, 4);
+    today = dd + '/' + mm + '/' + yyyy;
+
+    console.log(today);
+
+    alltrack = await track_db.find({ date: today });
+
+    var ress = "";
+    for (i = 0; i < alltrack.length; i++) {
+        ress += alltrack[i].name + '|' + alltrack[i].time + '|' + alltrack[i].productive + '*';
+    }
+    console.log(ress);
+    mainWindow.webContents.send('results', ress);
+
+})
 
 
 const menu = [
@@ -114,22 +135,22 @@ const menu = [
             {
                 label: 'Charts',
                 click() {
-                    
+
                 }
             }
         ]
     },
     {
-        label: 'Options',
+        label: 'Timer',
         submenu: [
             {
-                label: 'Hide Timer',
+                label: 'Hide',
                 click() {
                     timerWindow.hide();
                 }
             },
             {
-                label: 'Show Timer',
+                label: 'Show',
                 click() {
                     timerWindow.show();
                 }
@@ -158,10 +179,10 @@ ipcMain.on('time', async function (e, timee) {
         prod = true;
 
 
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
+    today = new Date();
+    dd = String(today.getDate()).padStart(2, '0');
+    mm = String(today.getMonth() + 1).padStart(2, '0');
+    yyyy = today.getFullYear();
     curr_message = curr_message.slice(0, -1);
     today = dd + '/' + mm + '/' + yyyy;
     console.log(today);

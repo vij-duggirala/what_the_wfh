@@ -28,7 +28,7 @@ def get_active_window_title():
 
 
 apps = ["Gmail1", "Disney+ Hotstar0", "Stack Overflow1",
-        "Visual Studio Code1", "Microsoft Teams1", "YouTube0", "Google Chrome1", "Mozilla Firefox1", "Spotify0", "Google Search1", "GitHub1", "Medium1", "Netflix0", "Prime Video0", "WhatsApp0", "Android Studio1", "Discord0", "Google Drive1"]
+        "Visual Studio Code1", "Microsoft Teams1", "YouTube0",  "Spotify0", "Google Search1", "GitHub1", "Medium1", "Netflix0", "Prime Video0", "WhatsApp0", "Android Studio1", "Discord0", "Google Drive1", "Google Chrome1", "Mozilla Firefox1", ]
 
 
 def printt():
