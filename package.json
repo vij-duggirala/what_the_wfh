@@ -1,0 +1,17 @@
+{
+  "name": "what_the_wfh",
+  "version": "1.0.0",
+  "description": "wfh activity tracker",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^11.2.3",
+    "mongoose": "^5.11.16",
+    "node-schedule": "^2.0.0",
+    "python-shell": "^2.0.3"
+  }
+}
