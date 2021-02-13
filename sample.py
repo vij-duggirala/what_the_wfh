@@ -27,9 +27,19 @@ def get_active_window_title():
     return None
 
 
+apps = ["Gmail1", "Disney+ Hotstar0", "Stack Overflow1",
+        "Visual Studio Code1", "Microsoft Teams1", "YouTube0", "Google Chrome1", "Mozilla Firefox1", "Spotify0", "Google Search1", "GitHub1", "Medium1", "Netflix0", "Prime Video0", "WhatsApp0", "Android Studio1", "Discord0", "Google Drive1"]
+
+
 def printt():
     if __name__ == "__main__":
-        print(get_active_window_title())
+        bigtit = get_active_window_title().decode("utf-8")
+        smalltit = bigtit+"0"
+        for app in apps:
+            if bigtit.find(app[:-1]) != -1:
+                smalltit = app
+                break
+        print(smalltit)
         sys.stdout.flush()
 
 
