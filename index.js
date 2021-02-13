@@ -13,6 +13,7 @@ let mainWindow;
 let timerWindow;
 
 let prev_message = "b'What The WFH'";
+let curr_message;
 
 app.on('ready', function () {
 
@@ -55,8 +56,7 @@ function startTimer() {
             nodeIntegration: true
         },
         x: width - 200,
-        y: 0,
-        show: false
+        y: 0
     });
 
     timerWindow.loadURL(url.format({
@@ -113,7 +113,7 @@ console.log(os_type);
 
 ipcMain.on('time', function (e, time) {
     //mongo 
-    console.log('!!!GOT TIME !!!');
+    console.log('!!!GOT TIME for!!!' + curr_message);
     console.log(time);
     console.log('!!');
 });
@@ -129,10 +129,9 @@ pyshell.on('message', function (message) {
     }
     else {
         if (message != prev_message) {
-
+            curr_message = prev_message;
             console.log(message);
             console.log('there');
-            prev_message = message;
             if (timerWindow === null) {
                 console.log('uy');
             }
@@ -141,7 +140,7 @@ pyshell.on('message', function (message) {
                 timerWindow.close();
             }
             startTimer();
-
+            prev_message = message;
         }
     }
 

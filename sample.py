@@ -33,7 +33,7 @@ def printt():
         sys.stdout.flush()
 
 
-schedule.every(0.0083).minutes.do(printt)
+schedule.every(0.0166).minutes.do(printt)
 while 1:
     schedule.run_pending()
     time.sleep(1)
