@@ -107,6 +107,12 @@ const menu = [
                 click(item, focusedWindow) {
                     focusedWindow.toggleDevTools();
                 }
+            },
+            {
+                label: 'Charts',
+                click() {
+                    
+                }
             }
         ]
     }
