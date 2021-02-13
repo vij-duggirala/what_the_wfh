@@ -10,7 +10,7 @@
 
 
 <body>
-    <h1>Productivity Tracker</h1>
+    <h1 style="align-self: center;">Productivity Tracker</h1>
 
 
     <label for="Date">Date : </label>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="col-6">
-                <div class="row">
+                <div id="chart_wrap" class="row">
                     <canvas id="myChart" width="50" height="50"></canvas>
                 </div>
                 <div class="row" id="tot">
@@ -124,6 +124,9 @@
             tot = 0;
             prod = 0;
             non_prod = 0;
+
+            document.getElementById('chart_wrap').innerHTML = '<canvas id="myChart" width="50" height="50"></canvas>';
+
 
             let item = document.getElementById('date').value;
             ipcRenderer.send('date', item);

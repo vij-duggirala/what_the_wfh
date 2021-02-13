@@ -119,23 +119,17 @@ const menu = [
         label: 'File',
         submenu: [
             {
-                label: 'Quit',
-                click() {
-                    timerWindow.webContents.send('close', cls);
-                    timerWindow.destroy();
-                    app.quit();
-                }
-            },
-            {
                 label: 'DevTools',
                 click(item, focusedWindow) {
                     focusedWindow.toggleDevTools();
                 }
             },
             {
-                label: 'Charts',
+                label: 'Quit',
                 click() {
-
+                    timerWindow.webContents.send('close', cls);
+                    timerWindow.destroy();
+                    app.quit();
                 }
             }
         ]
@@ -156,6 +150,23 @@ const menu = [
                 }
             }
         ]
+    },
+    {
+        label: 'Configure',
+        submenu: [
+            {
+                label: 'Location Details',
+                click() {
+                    mainWindow.loadURL(url.format({
+                        pathname: path.join(__dirname, 'loc.html'),
+                        protocol: 'file',
+                        slashes: true
+                    }));
+                }
+            }
+        ]
+
+
     }
 ]
 
