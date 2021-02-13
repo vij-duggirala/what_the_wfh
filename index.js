@@ -22,7 +22,7 @@ const { app, BrowserWindow, Menu, ipcMain } = electron;
 let mainWindow;
 let timerWindow;
 
-let prev_message = "What The WFH";
+let prev_message = "What The WFH1";
 let curr_message;
 
 app.on('ready', function () {
@@ -67,7 +67,7 @@ function startTimer() {
         },
         x: width - 200,
         y: 0,
-        //     show: false
+        //show: false
 
     });
 
@@ -80,13 +80,14 @@ function startTimer() {
 
     timerWindow.setAlwaysOnTop(true, 'screen');
 
+
     /// timerWindow.on('close', function () {
     //  timerWindow = null;
     //})
-    //   timerWindow.showInactive()
+    // timerWindow.showInactive()
 
-    const timerMenu = Menu.buildFromTemplate([]);
-    Menu.setApplicationMenu(timerMenu);
+
+    timerWindow.menuBarVisible = false;
 
 }
 
@@ -99,7 +100,9 @@ const menu = [
             {
                 label: 'Quit',
                 click() {
-                    startTimer();
+                    timerWindow.webContents.send('close', cls);
+                    timerWindow.destroy();
+                    app.quit();
                 }
             },
             {
@@ -112,6 +115,23 @@ const menu = [
                 label: 'Charts',
                 click() {
                     
+                }
+            }
+        ]
+    },
+    {
+        label: 'Options',
+        submenu: [
+            {
+                label: 'Hide Timer',
+                click() {
+                    timerWindow.hide();
+                }
+            },
+            {
+                label: 'Show Timer',
+                click() {
+                    timerWindow.show();
                 }
             }
         ]
@@ -133,14 +153,19 @@ console.log(os_type);
 
 
 ipcMain.on('time', async function (e, timee) {
+    var prod = false;
+    if (curr_message.charAt(curr_message.length - 1) == '1')
+        prod = true;
+
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
-
+    curr_message = curr_message.slice(0, -1);
     today = dd + '/' + mm + '/' + yyyy;
     console.log(today);
+
     let already = await track_db.findOne({ date: today, name: curr_message });
     if (already) {
         track_db.updateOne({ date: today, name: curr_message }, { $inc: { time: timee } }, {}, (err, numberAffected) => {
@@ -148,10 +173,12 @@ ipcMain.on('time', async function (e, timee) {
         });
     }
     else {
+
         var newtrack = new track_db({
             name: curr_message,
             time: timee,
             date: today,
+            productive: prod
         });
         await newtrack.save();
         console.log('saved');
@@ -169,7 +196,7 @@ ipcMain.on('time', async function (e, timee) {
 var cls = 1;
 pyshell.on('message', function (message) {
 
-    if (message === "Ticking...") {
+    if (message === "Ticking...0") {
         // 
     }
     else {
