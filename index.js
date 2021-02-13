@@ -1,6 +1,16 @@
 const electron = require('electron')
 const url = require('url')
 const path = require('path')
+const mongoose = require('mongoose')
+
+
+mongoose.connect('mongodb://localhost/wfh', {
+    useNewUrlParser: true, useUnifiedTopology: true,
+    useCreateIndex: true, useFindAndModify: false
+})
+
+const track_db = require('./models/db.js');
+
 
 const schedule = require('node-schedule');
 
@@ -12,7 +22,7 @@ const { app, BrowserWindow, Menu, ipcMain } = electron;
 let mainWindow;
 let timerWindow;
 
-let prev_message = "b'What The WFH'";
+let prev_message = "What The WFH";
 let curr_message;
 
 app.on('ready', function () {
@@ -75,6 +85,9 @@ function startTimer() {
     //})
     //   timerWindow.showInactive()
 
+    const timerMenu = Menu.buildFromTemplate([]);
+    Menu.setApplicationMenu(timerMenu);
+
 }
 
 
@@ -113,11 +126,35 @@ else
 console.log(os_type);
 
 
-ipcMain.on('time', function (e, time) {
-    //mongo 
-    console.log('!!!GOT TIME for!!!' + curr_message);
-    console.log(time);
-    console.log('!!');
+ipcMain.on('time', async function (e, timee) {
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    today = dd + '/' + mm + '/' + yyyy;
+    console.log(today);
+    let already = await track_db.findOne({ date: today, name: curr_message });
+    if (already) {
+        track_db.updateOne({ date: today, name: curr_message }, { $inc: { time: timee } }, {}, (err, numberAffected) => {
+            console.log('updated');
+        });
+    }
+    else {
+        var newtrack = new track_db({
+            name: curr_message,
+            time: timee,
+            date: today,
+        });
+        await newtrack.save();
+        console.log('saved');
+
+    }
+
+
+    console.log(curr_message + '  -   ' + timee);
+
 });
 
 
@@ -126,14 +163,13 @@ ipcMain.on('time', function (e, time) {
 var cls = 1;
 pyshell.on('message', function (message) {
 
-    if (message === "b'Ticking...'") {
-        console.log('tick');
+    if (message === "Ticking...") {
+        // 
     }
     else {
         if (message != prev_message) {
             curr_message = prev_message;
             console.log(message);
-            console.log('there');
             if (timerWindow === null) {
                 console.log('uy');
             }
