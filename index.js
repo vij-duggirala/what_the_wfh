@@ -55,7 +55,8 @@ function startTimer() {
             nodeIntegration: true
         },
         x: width - 200,
-        y: 0
+        y: 0,
+        show: false
     });
 
     timerWindow.loadURL(url.format({
@@ -67,9 +68,10 @@ function startTimer() {
 
     timerWindow.setAlwaysOnTop(true, 'screen');
 
-    timerWindow.on('close', function () {
-        timerWindow = null;
-    })
+    /// timerWindow.on('close', function () {
+    //  timerWindow = null;
+    //})
+    timerWindow.showInactive()
 
 }
 
@@ -111,7 +113,9 @@ console.log(os_type);
 
 ipcMain.on('time', function (e, time) {
     //mongo 
+    console.log('!!!GOT TIME !!!');
     console.log(time);
+    console.log('!!');
 });
 
 
@@ -121,16 +125,23 @@ var cls = 1;
 pyshell.on('message', function (message) {
 
     if (message === "b'Ticking...'") {
-        //kjhk
+        console.log('tick');
     }
     else {
-        console.log(message);
         if (message != prev_message) {
+
+            console.log(message);
             console.log('there');
             prev_message = message;
-            console.log(timerWindow);
-            timerWindow.webContents.send('close', cls);
+            if (timerWindow === null) {
+                console.log('uy');
+            }
+            else {
+                timerWindow.webContents.send('close', cls);
+                timerWindow.close();
+            }
             startTimer();
+
         }
     }
 
