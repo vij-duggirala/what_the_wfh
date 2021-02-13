@@ -5,6 +5,9 @@
     <title>What The WFH</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 
 </head>
 
@@ -19,10 +22,9 @@
     <button onclick="util()">Analyse</button>
 
 
-
     <div class="container">
         <div class="row">
-            <div id="res" class="col-6">
+            <div id="card-container" class="col-6">
 
             </div>
 
@@ -139,7 +141,7 @@
             borderc = [];
             var alltrack = ress.split('*');
 
-            let u_list = document.getElementById('res');
+            let u_list = document.getElementById('card-container');
             if (alltrack.length) {
                 for (i = 0; i < alltrack.length; i++) {
                     var arr = alltrack[i].split('|');
@@ -150,17 +152,35 @@
                     bg.push("#" + Math.floor(Math.random() * 16777215).toString(16));
                     borderc.push("#" + Math.floor(Math.random() * 16777215).toString(16));
                     let new_div = document.createElement('div');
-                    new_div.setAttribute('class', 'row');
+
+                    new_div.className = 'card shadow cursor-pointer';
+
+                    let another_div = document.createElement('div');
+                    another_div.className = 'card-body';
+
+                    let title = document.createElement('h5');
+                    title.innerText = arr[0];
+                    title.className = 'card-title';
+
+                    let color = document.createElement('div');
+                    color.innerText = getTime(parseInt(arr[1]));
+                    color.className = 'card-color';
 
                     if (arr[2] === "true") {
-                        new_div.setAttribute('style', 'color: green');
+                        color.setAttribute('style', 'color: green');
                         prod += parseInt(arr[1]);
                     }
                     else {
-                        new_div.setAttribute('style', 'color: red');
+                        color.setAttribute('style', 'color: red');
                         non_prod += parseInt(arr[1]);
                     }
-                    new_div.innerHTML = arr[0] + "<br>" + getTime(parseInt(arr[1])) + "<br>";
+                    //    new_div.innerHTML = arr[0] + "<br>" + getTime(parseInt(arr[1])) + "<br>";
+
+                    another_div.appendChild(title);
+                    another_div.appendChild(color);
+
+                    new_div.appendChild(another_div);
+
 
                     u_list.appendChild(new_div);
                     tot += parseInt(arr[1]);
