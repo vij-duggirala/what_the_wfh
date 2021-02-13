@@ -56,7 +56,9 @@ function startTimer() {
             nodeIntegration: true
         },
         x: width - 200,
-        y: 0
+        y: 0,
+        //     show: false
+
     });
 
     timerWindow.loadURL(url.format({
@@ -71,7 +73,7 @@ function startTimer() {
     /// timerWindow.on('close', function () {
     //  timerWindow = null;
     //})
-    timerWindow.showInactive()
+    //   timerWindow.showInactive()
 
 }
 
@@ -137,9 +139,8 @@ pyshell.on('message', function (message) {
             }
             else {
                 timerWindow.webContents.send('close', cls);
-                timerWindow.close();
+
             }
-            startTimer();
             prev_message = message;
         }
     }

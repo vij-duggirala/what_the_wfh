@@ -43,22 +43,17 @@
     console.log('whaa');
 
     window.onbeforeunload = (e) => {
-        if (cls) {
-            console.log('unload close');
-            console.log('inside ipc');
-            time = 3600 * hours + 60 * minutes + seconds;
-            ipcRenderer.send('time', time);
-            win.destroy();
-        }
-        else {
-            e.returnValue = false;
-        }
+
+        e.returnValue = false;
+
     };
 
 
     ipcRenderer.on('close', function (e, item) {
-        cls = true;
-        window.close();
+        time = 3600 * hours + 60 * minutes + seconds;
+        hours = seconds = minutes = 0;
+        ipcRenderer.send('time', time);
+
     });
 
 </script>
