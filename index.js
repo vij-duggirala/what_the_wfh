@@ -81,9 +81,9 @@ function startTimer() {
     timerWindow.setAlwaysOnTop(true, 'screen');
 
 
-    /// timerWindow.on('close', function () {
-    //  timerWindow = null;
-    //})
+    timerWindow.on('close', function () {
+        timerWindow = null;
+    })
     // timerWindow.showInactive()
 
 
