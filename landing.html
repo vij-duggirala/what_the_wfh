@@ -105,29 +105,7 @@
                 }
             });
 
-            var ctx2 = document.getElementById('mychart2');
-            var myChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: [Productive, Non - Productive],
-                    datasets: [{
-                        label: 'Time Spent Split',
-                        data: [prod, non_prod],
-                        backgroundColor: ["#90EE90", "#FF7F7F"],
-                        borderColor: borderc,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
-                }
-            });
+
         }
 
 

@@ -100,7 +100,6 @@ ipcMain.on('date', async function (e, date) {
     yyyy = date.substr(0, 4);
     today = dd + '/' + mm + '/' + yyyy;
 
-    console.log(today);
 
     alltrack = await track_db.find({ date: today });
 
@@ -108,7 +107,6 @@ ipcMain.on('date', async function (e, date) {
     for (i = 0; i < alltrack.length; i++) {
         ress += alltrack[i].name + '|' + alltrack[i].time + '|' + alltrack[i].productive + '*';
     }
-    console.log(ress);
     mainWindow.webContents.send('results', ress);
 
 })
@@ -206,12 +204,11 @@ ipcMain.on('time', async function (e, timee) {
     yyyy = today.getFullYear();
     curr_message = curr_message.slice(0, -1);
     today = dd + '/' + mm + '/' + yyyy;
-    console.log(today);
 
     let already = await track_db.findOne({ date: today, name: curr_message });
     if (already) {
         track_db.updateOne({ date: today, name: curr_message }, { $inc: { time: timee } }, {}, (err, numberAffected) => {
-            console.log('updated');
+            console.log('db updated');
         });
     }
     else {
@@ -223,7 +220,7 @@ ipcMain.on('time', async function (e, timee) {
             productive: prod
         });
         await newtrack.save();
-        console.log('saved');
+        console.log('saved in db');
 
     }
 
@@ -244,7 +241,6 @@ ipcMain.on('req_loc', async function (e, temp) {
         for (j = 0; j < all_loc.length; j++) {
             str_fin += all_loc[j].ipv4 + '|' + all_loc[j].date + '|' + all_loc[j].lat + '|' + all_loc[j].long + '|' + all_loc[j].country + '|' + all_loc[j].timezone + '*';
         }
-        console.log(str_fin);
         str_fin = str_fin.slice(0, -1);
         if (mainWindow != null)
             mainWindow.webContents.send('loc_res', str_fin);
@@ -263,9 +259,8 @@ pyshell.on('message', function (message) {
     else {
         if (message != prev_message) {
             curr_message = prev_message;
-            console.log(message);
             if (timerWindow === null) {
-                console.log('uy');
+                // nothing
             }
             else {
                 timerWindow.webContents.send('close', cls);
@@ -286,9 +281,9 @@ const job = schedule.scheduleJob('* */3 * * *', async function () {
     console.log(location);
 
     let loc_already = await loc.findOne({ ipv4: ip });
-    console.log(loc_already);
+
     if (loc_already != null) {
-        console.log('already');
+        console.log('loc already present');
     }
     else {
         var d = new Date().toString();
