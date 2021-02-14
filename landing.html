@@ -3,26 +3,33 @@
 
 <head>
     <title>What The WFH</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
 
 
 </head>
 
 
 <body>
-    <h1 style="align-self: center;">Productivity Tracker</h1>
-
-
-    <label for="Date">Date : </label>
-    <input type="date" name="date" id="date">
-
-    <button onclick="util()">Analyse</button>
-
-
     <div class="container">
+        <center>
+            <h1 style="font-family:Verdana, Geneva, Tahoma, sans-serif"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-clock"
+                    viewBox="0 0 16 20">
+                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                </svg> Productivity Tracker</h1>
+        </center>
+        <div class="container" style="margin-bottom: 2%;">
+            <div class="row">
+                <div class="col">
+                    <input class="form-control" type="date" name="date" id="date">
+                </div>
+                <div class="col">
+                    <button class="form-control btn btn-primary" onclick="util()">Analyse</button>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div id="card-container" class="col-6">
 
@@ -32,20 +39,21 @@
                 <div id="chart_wrap" class="row">
                     <canvas id="myChart" width="50" height="50"></canvas>
                 </div>
-                <div class="row" id="tot">
+                <strong>
+                    <div class="row" id="tot" style="color: purple;">
 
-                </div>
-                <div class="row" id="nop">
+                    </div>
+                    <div class="row" id="nop" style="color: red;">
 
-                </div>
-                <div class="row" id="op">
+                    </div>
+                    <div class="row" id="op" style="color: green;">
 
-                </div>
+                    </div>
+                </strong>
             </div>
         </div>
+
     </div>
-
-
 
 
 
@@ -126,10 +134,7 @@
             tot = 0;
             prod = 0;
             non_prod = 0;
-
             document.getElementById('chart_wrap').innerHTML = '<canvas id="myChart" width="50" height="50"></canvas>';
-
-
             let item = document.getElementById('date').value;
             ipcRenderer.send('date', item);
         }
@@ -215,6 +220,12 @@
     </script>
 
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
 
 </body>
 
