@@ -259,7 +259,7 @@ pyshell.on('message', function (message) {
     else {
         if (message != prev_message) {
             curr_message = prev_message;
-            if (timerWindow === null) {
+            if (timerWindow == null) {
                 // nothing
             }
             else {
