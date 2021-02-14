@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "electron": "^11.2.3",
     "geoip-lite": "^1.4.2",
     "iplocation": "^7.2.0",
     "mongodb": "^3.6.4",
