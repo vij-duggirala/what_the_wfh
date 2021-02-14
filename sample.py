@@ -33,7 +33,11 @@ apps = ["Gmail1", "Disney+ Hotstar0", "Stack Overflow1",
 
 def printt():
     if __name__ == "__main__":
-        bigtit = get_active_window_title().decode("utf-8")
+        bigtit = get_active_window_title()
+        if bigtit == None:
+            bigtit = "Desktop"
+        else:
+            bigtit = bigtit.decode("utf-8")
         smalltit = bigtit+"0"
         for app in apps:
             if bigtit.find(app[:-1]) != -1:
