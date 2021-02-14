@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Locations</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <h2> All Known Locations (refreshed every 3 hours) </h2>
+    <div id="card-container" class="card border-info mb-3"></div>
+</body>
+
+<script>
+    var temp = 1;
+    const electron = require('electron');
+    const { ipcRenderer } = electron;
+
+
+    window.addEventListener('load', function (e) {
+        var tempp = document.getElementById('card-container');
+        while (tempp.firstChild)
+            tempp.removeChild(tempp.lastChild);
+        ipcRenderer.send('req_loc', temp);
+    });
+
+    let cardContainer = document.getElementById('card-container');
+    ipcRenderer.on('loc_res', function (e, ress) {
+        all_loc = ress.split('*');
+        var i;
+        for (i = 0; i < all_loc.length; i++) {
+            var curr = all_loc[i].split('|');
+
+
+            let cardBody = document.createElement('div');
+            cardBody.innerText = "IP Address: " + curr[0];
+            cardBody.className = 'card-header';
+
+            let title = document.createElement('div');
+            title.className = 'card-body text-info';
+
+            let color = document.createElement('div');
+            color.innerText = "Configured on " + curr[1];
+            color.className = 'card-title';
+
+            let next_thing = document.createElement('div');
+            next_thing.innerText = "Coordinates: " + curr[2] + ", " + curr[3];
+            next_thing.className = 'card-subtitle';
+
+            let another_thing = document.createElement('div');
+            another_thing.innerText = curr[4] + ' || ' + curr[5];
+
+            title.appendChild(color);
+            title.appendChild(next_thing);
+            title.appendChild(another_thing);
+
+            cardContainer.appendChild(cardBody);
+            cardContainer.appendChild(title);
+        }
+    })
+
+</script>
+
+</html>

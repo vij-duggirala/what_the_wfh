@@ -119,6 +119,16 @@ const menu = [
         label: 'File',
         submenu: [
             {
+                label: 'HomePage',
+                click() {
+                    mainWindow.loadURL(url.format({
+                        pathname: path.join(__dirname, 'landing.html'),
+                        protocol: 'file',
+                        slashes: true
+                    }));
+                }
+            },
+            {
                 label: 'DevTools',
                 click(item, focusedWindow) {
                     focusedWindow.toggleDevTools();
@@ -221,6 +231,25 @@ ipcMain.on('time', async function (e, timee) {
     console.log(curr_message + '  -   ' + timee);
 
 });
+const publicIp = require('public-ip');
+const geoip = require('geoip-lite');
+const loc = require('./models/loc');
+
+ipcMain.on('req_loc', async function (e, temp) {
+
+    let all_loc = await loc.find({});
+    var j;
+    var str_fin = "";
+    if (all_loc) {
+        for (j = 0; j < all_loc.length; j++) {
+            str_fin += all_loc[j].ipv4 + '|' + all_loc[j].date + '|' + all_loc[j].lat + '|' + all_loc[j].long + '|' + all_loc[j].country + '|' + all_loc[j].timezone + '*';
+        }
+        console.log(str_fin);
+        str_fin = str_fin.slice(0, -1);
+        if (mainWindow != null)
+            mainWindow.webContents.send('loc_res', str_fin);
+    }
+})
 
 
 
@@ -246,4 +275,34 @@ pyshell.on('message', function (message) {
         }
     }
 
-})
+});
+
+
+const job = schedule.scheduleJob('* */3 * * *', async function () {
+
+    ip = await publicIp.v4();
+    location = geoip.lookup(ip);
+    console.log(ip);
+    console.log(location);
+
+    let loc_already = await loc.findOne({ ipv4: ip });
+    console.log(loc_already);
+    if (loc_already != null) {
+        console.log('already');
+    }
+    else {
+        var d = new Date().toString();
+        var newLoc = new loc({
+            ipv4: ip,
+            date: Date.now(),
+            lat: location.ll[0],
+            long: location.ll[1],
+            country: location.country,
+            timezone: location.timezone
+        });
+
+        await newLoc.save();
+    }
+
+
+});
